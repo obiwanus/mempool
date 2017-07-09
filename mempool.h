@@ -25,7 +25,7 @@ class Mempool {
 
   Mempool_Chunk *chunks_ = nullptr;
   Mempool_Chunk *last_chunk_ = nullptr;
-  Mempool_Element *free_element = nullptr;
+  Mempool_Element *free_element_ = nullptr;
 
   Mempool_Element *AddChunk(Mempool_Chunk *chunk,
                             Mempool_Element *last_chunk_tail);

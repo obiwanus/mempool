@@ -3,8 +3,13 @@
 
 #include "mempool.h"
 
-// TODO: add function comments
-
+/**
+ * Creates a memory pool
+ * element_size: the size of the element data (excluding the header)
+ * per_chunk: number of elements per chunk
+ * alloc_total: total number of elements to allocate (used to calculate
+ *              how many chunks we need right now to store them)
+ */
 Mempool::Mempool(unsigned int element_size, unsigned int per_chunk,
                  unsigned int alloc_total) {
   // Calculate sizes of chunk and element including the headers
@@ -27,9 +32,22 @@ Mempool::Mempool(unsigned int element_size, unsigned int per_chunk,
   }
 }
 
+/**
+ * Adds an allocated chunk to the pool
+ * last_chunk_tail: last element of the previous chunk (used when adding
+                    chunks to pool in a loop, so that the last element of
+                    a chunk can point to the first element of the next chunk)
+ */
 Mempool_Element *Mempool::AddChunk(Mempool_Chunk *chunk,
-                                   Mempool_Element *last_chunk_tail) {
+                                   Mempool_Element *last_chunk_tail = nullptr) {
   Mempool_Element *element = FirstElement(chunk);
+
+  assert(free_element_ == nullptr || last_chunk_tail == nullptr);
+
+  // If this is a newly created pool, add the first element to the free list
+  if (free_element_ == nullptr) {
+    free_element_ = element;
+  }
 
   // Point to the first element of the chunk from the last element
   // of the previous chunk, if passed
