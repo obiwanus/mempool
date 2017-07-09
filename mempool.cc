@@ -28,11 +28,23 @@ Mempool::Mempool(unsigned int element_size, unsigned int per_chunk,
 }
 
 Mempool_Element *Mempool::AddChunk(Mempool_Chunk *chunk,
-                                   Mempool_Element *last_element) {
-  Mempool_Element *tail = nullptr;
-  // TODO:
+                                   Mempool_Element *last_chunk_tail) {
+  Mempool_Element *element = FirstElement(chunk);
 
-  return tail;
+  // Point to the first element of the chunk from the last element
+  // of the previous chunk, if passed
+  if (last_chunk_tail != nullptr) {
+    last_chunk_tail->next_free = element;
+  }
+
+  // Make the initial free list of elements
+  for (int i = 0; i < (per_chunk_ - 1); ++i) {
+    element->next_free = NextElement(element);
+    element = element->next_free;
+  }
+  element->next_free = nullptr;  // terminate the list
+
+  return element;
 }
 
 /**
@@ -41,6 +53,13 @@ Mempool_Element *Mempool::AddChunk(Mempool_Chunk *chunk,
  */
 Mempool_Element *Mempool::FirstElement(Mempool_Chunk *chunk) {
   return (Mempool_Element *)(chunk + 1);
+}
+
+/**
+ * Returns a pointer to where the next adjacent element should be located
+ */
+Mempool_Element *Mempool::NextElement(Mempool_Element *element) {
+  return (Mempool_Element *)((char *)element + element_size_);
 }
 
 int main() {}

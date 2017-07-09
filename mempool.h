@@ -2,7 +2,7 @@
 #define _MEMPOOL_H_
 
 struct Mempool_Element {
-  Mempool_Element *next;
+  Mempool_Element *next_free;
 };
 
 struct Mempool_Chunk {
@@ -28,8 +28,9 @@ class Mempool {
   Mempool_Element *free_element = nullptr;
 
   Mempool_Element *AddChunk(Mempool_Chunk *chunk,
-                            Mempool_Element *last_element);
+                            Mempool_Element *last_chunk_tail);
   Mempool_Element *FirstElement(Mempool_Chunk *chunk);
+  Mempool_Element *NextElement(Mempool_Element *element);
 };
 
 #endif  // _MEMPOOL_H_
