@@ -16,6 +16,7 @@ class Mempool {
 
   Mempool_Element *AllocateElement();
   void FreeElement(Mempool_Element *element);
+  void Destroy();
 
  private:
   unsigned int chunk_size_;         // size of chunk, in bytes
@@ -32,6 +33,7 @@ class Mempool {
                             Mempool_Element *last_chunk_tail = nullptr);
   Mempool_Element *GetFirstElement(Mempool_Chunk *chunk);
   Mempool_Element *GetNextElement(Mempool_Element *element);
+  void FreeChunks(Mempool_Chunk *chunk);
 };
 
 #endif  // _MEMPOOL_H_

@@ -94,6 +94,31 @@ Mempool_Chunk *Mempool::NewChunk() {
 }
 
 /**
+ * Frees everything in the pool
+ */
+void Mempool::Destroy() {
+  FreeChunks(chunks_);
+
+  chunk_size_ = 0;
+  element_size_ = 0;
+  per_chunk_ = 0;
+  total_used_ = 0;
+  chunks_ = nullptr;
+  chunks_tail_ = nullptr;
+  free_element_ = nullptr;
+}
+
+/**
+ * Recursively free each chunk, starting from tail
+ */
+void Mempool::FreeChunks(Mempool_Chunk *chunk) {
+  if (chunk->next) {
+    FreeChunks(chunk->next);
+  }
+  free(chunk);
+}
+
+/**
  * Adds an allocated chunk to the pool
  * last_chunk_tail: last element of the previous chunk (used when adding
                     chunks to pool in a loop, so that the last element of
