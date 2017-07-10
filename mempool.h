@@ -24,13 +24,14 @@ class Mempool {
   unsigned int total_used_ = 0;     // number of elements in use
 
   Mempool_Chunk *chunks_ = nullptr;
-  Mempool_Chunk *last_chunk_ = nullptr;
+  Mempool_Chunk *chunks_tail_ = nullptr;
   Mempool_Element *free_element_ = nullptr;
 
+  Mempool_Chunk *NewChunk();
   Mempool_Element *AddChunk(Mempool_Chunk *chunk,
-                            Mempool_Element *last_chunk_tail);
-  Mempool_Element *FirstElement(Mempool_Chunk *chunk);
-  Mempool_Element *NextElement(Mempool_Element *element);
+                            Mempool_Element *last_chunk_tail = nullptr);
+  Mempool_Element *GetFirstElement(Mempool_Chunk *chunk);
+  Mempool_Element *GetNextElement(Mempool_Element *element);
 };
 
 #endif  // _MEMPOOL_H_
