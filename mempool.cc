@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdint.h>
 #include <assert.h>
 
 #include "mempool.h"
@@ -128,8 +129,6 @@ Mempool_Element *Mempool::AddChunk(Mempool_Chunk *chunk,
                                    Mempool_Element *last_chunk_tail) {
   Mempool_Element *element = GetFirstElement(chunk);
 
-  assert(free_element_ == nullptr || last_chunk_tail == nullptr);
-
   if (chunks_tail_) {
     // Append the chunk to the pool linked list
     chunks_tail_->next = chunk;
@@ -176,5 +175,3 @@ Mempool_Element *Mempool::GetFirstElement(Mempool_Chunk *chunk) {
 Mempool_Element *Mempool::GetNextElement(Mempool_Element *element) {
   return (Mempool_Element *)((char *)element + element_size_);
 }
-
-int main() {}

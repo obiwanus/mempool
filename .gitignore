@@ -33,3 +33,7 @@
 
 
 *.sublime-workspace
+*.config
+*.creator*
+*.files
+*.includes
